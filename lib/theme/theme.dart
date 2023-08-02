@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  static ThemeData get light {
-    return ThemeData.light();
+  static get light {
+    return ThemeData.from(
+      colorScheme: const ColorScheme.light(),
+    );
   }
 
-  static ThemeData get dark {
-    return ThemeData.dark();
+  static get dark {
+    return ThemeData.from(
+      colorScheme: const ColorScheme.dark(),
+    );
   }
 }
