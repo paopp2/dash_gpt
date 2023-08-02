@@ -1,20 +1,10 @@
+import 'package:bloc/bloc.dart';
+import 'package:dash_gpt/app/app_bloc_observer.dart';
 import 'package:flutter/material.dart';
 
+import 'app/app.dart';
+
 void main() {
-  runApp(const MainApp());
-}
-
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
-    );
-  }
+  Bloc.observer = AppBlocObserver();
+  runApp(const App());
 }
