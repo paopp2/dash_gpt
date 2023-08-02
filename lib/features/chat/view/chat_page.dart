@@ -16,8 +16,38 @@ class ChatView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Dash GPT")),
-      body: const Center(
-        child: Text('Chat view'),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              reverse: true,
+              itemBuilder: (context, index) {
+                return const ListTile(
+                  title: Text('Hello world'),
+                );
+              },
+            ),
+          ),
+          Container(
+            color: Theme.of(context).secondaryHeaderColor,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                children: [
+                  const Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(hintText: 'Message here'),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.send),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
