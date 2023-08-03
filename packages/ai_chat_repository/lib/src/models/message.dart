@@ -15,4 +15,7 @@ class Message extends Equatable {
 
   @override
   List<Object?> get props => [content, sender];
+
+  @override
+  String toString() => "Message {sender: $sender, content: $content}";
 }
