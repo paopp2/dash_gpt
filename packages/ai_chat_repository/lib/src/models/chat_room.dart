@@ -14,6 +14,12 @@ class ChatRoom extends Equatable {
   final ChatRoomHeader header;
   final List<Message> messages;
 
+  ChatRoom withNewMessage(Message newMessage) {
+    return copyWith(
+      messages: [...messages, newMessage],
+    );
+  }
+
   ChatRoom copyWith({
     List<Message>? messages,
   }) {

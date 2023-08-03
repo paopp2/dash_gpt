@@ -5,11 +5,12 @@ import 'package:uuid/uuid.dart';
 @immutable
 class ChatRoomHeader extends Equatable {
   ChatRoomHeader({
+    String? id,
     this.title = '',
-  }) : id = Uuid().v4();
+  }) : id = id ?? Uuid().v4();
 
   final String id;
-  final String title;
+  final String? title;
 
   @override
   List<Object?> get props => [id, title];
