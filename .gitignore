@@ -42,3 +42,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Contains your config constants
+# Referenced through "flutter run --dart-define-from-file=secrets.json"
+secrets.json
