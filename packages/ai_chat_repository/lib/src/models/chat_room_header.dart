@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
+import 'package:meta/meta.dart';
 import 'package:uuid/uuid.dart';
 
+@immutable
 class ChatRoomHeader extends Equatable {
   ChatRoomHeader({
     this.title = '',

@@ -1,7 +1,9 @@
 import 'package:equatable/equatable.dart';
+import 'package:meta/meta.dart';
 
 enum MessageSender { ai, user }
 
+@immutable
 class Message extends Equatable {
   Message({
     required this.content,

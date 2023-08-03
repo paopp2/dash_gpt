@@ -1,7 +1,9 @@
 import 'package:equatable/equatable.dart';
+import 'package:meta/meta.dart';
 
 import 'models.dart';
 
+@immutable
 class ChatRoom extends Equatable {
   ChatRoom({
     ChatRoomHeader? header,
