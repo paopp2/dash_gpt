@@ -8,6 +8,8 @@ environment:
 
 # Add regular dependencies here.
 dependencies:
+  equatable: ^2.0.5
+  uuid: ^3.0.7
   # path: ^1.8.0
 
 dev_dependencies:
