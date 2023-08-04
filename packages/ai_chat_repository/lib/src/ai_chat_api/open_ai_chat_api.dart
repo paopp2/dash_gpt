@@ -17,14 +17,14 @@ class OpenAIChatApi implements AIChatApi {
 
   final OpenAI _openAI;
   final String _openAIModel;
-  final _chatRoomMapSubject =
+
+  @visibleForTesting
+  final chatRoomMapSubject =
       BehaviorSubject<Map<ChatRoomHeader, ChatRoom>>.seeded({});
-  late final Stream<Map<ChatRoomHeader, ChatRoom>> chatRoomMapStream =
-      _chatRoomMapSubject.stream;
 
   @override
   Stream<ChatRoom> chatRoomStream(String id) {
-    return _chatRoomMapSubject
+    return chatRoomMapSubject
         .map((Map<ChatRoomHeader, ChatRoom> chatRoomMap) =>
             chatRoomMap.values.toList())
         .map((List<ChatRoom> chatRooms) =>
@@ -34,9 +34,9 @@ class OpenAIChatApi implements AIChatApi {
 
   @override
   Future<void> createNewChatRoom({String? id, String? title}) async {
-    final currChatRoomMap = _chatRoomMapSubject.value;
+    final currChatRoomMap = chatRoomMapSubject.value;
     final newChatRoom = ChatRoom(header: ChatRoomHeader(id: id, title: title));
-    _chatRoomMapSubject.add({
+    chatRoomMapSubject.add({
       ...currChatRoomMap,
       newChatRoom.header: newChatRoom,
     });
@@ -44,7 +44,7 @@ class OpenAIChatApi implements AIChatApi {
 
   @override
   Stream<List<ChatRoomHeader>> getChatRoomHeaders() {
-    return _chatRoomMapSubject
+    return chatRoomMapSubject
         .map((chatRoomMap) => chatRoomMap.keys.toList())
         .asBroadcastStream();
   }
@@ -80,8 +80,8 @@ class OpenAIChatApi implements AIChatApi {
 
   @visibleForTesting
   void updateChatRoom(ChatRoom chatRoom) {
-    _chatRoomMapSubject.add({
-      ..._chatRoomMapSubject.value,
+    chatRoomMapSubject.add({
+      ...chatRoomMapSubject.value,
       chatRoom.header: chatRoom,
     });
   }
