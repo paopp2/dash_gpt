@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:ai_chat_repository/src/ai_chat_api/ai_chat_api.dart';
 import 'package:ai_chat_repository/src/models/chat_room.dart';
 import 'package:ai_chat_repository/src/models/chat_room_header.dart';
@@ -52,14 +54,28 @@ class OpenAIChatApi implements AIChatApi {
     required String chatRoomId,
     required String message,
   }) async {
+    final sendMessageCompleter = Completer<void>();
+    final chatRoomChangesSubject = BehaviorSubject<ChatRoom>();
+
     final userMessage = Message(sender: MessageSender.user, content: message);
     final chatRoom = await chatRoomStream(chatRoomId).first;
     final chatRoomWithUserMessage = chatRoom.withNewMessage(userMessage);
-    updateChatRoom(chatRoomWithUserMessage);
+    chatRoomChangesSubject.add(chatRoomWithUserMessage);
 
-    final chatRoomMessages = chatRoomWithUserMessage.messages;
-    final aiReplyMessage = await getAiReplyMessage(chatRoomMessages);
-    updateChatRoom(chatRoomWithUserMessage.withNewMessage(aiReplyMessage));
+    getAIReplyMessageStream(chatRoomWithUserMessage.messages).listen(
+      (aiReplyMessage) => chatRoomChangesSubject.add(
+        chatRoomWithUserMessage.copyWith(
+          messages: [...chatRoomWithUserMessage.messages, aiReplyMessage],
+        ),
+      ),
+      onDone: () {
+        chatRoomChangesSubject.close();
+        sendMessageCompleter.complete();
+      },
+    );
+
+    chatRoomChangesSubject.stream.listen(updateChatRoom);
+    return sendMessageCompleter.future;
   }
 
   @visibleForTesting
@@ -82,17 +98,12 @@ class OpenAIChatApi implements AIChatApi {
   }
 
   @visibleForTesting
-  Future<Message> getAiReplyMessage(List<Message> chatMessages) async {
+  Stream<Message> getAIReplyMessageStream(List<Message> chatMessages) {
     final aiChatMessages = chatMessages.map(toOpenAIMessage).toList();
-
-    OpenAIChatCompletionModel chatCompletion = await _openAI.chat.create(
-      model: _openAIModel,
-      messages: aiChatMessages,
-    );
-
-    return Message(
-      sender: MessageSender.ai,
-      content: chatCompletion.choices.first.message.content,
-    );
+    return _openAI.chat
+        .createStream(model: _openAIModel, messages: aiChatMessages)
+        .map((aiChatCompletion) => aiChatCompletion.choices.first.delta.content)
+        .scan((aiReply, aiReplyDelta, _) => aiReply + (aiReplyDelta ?? ''), '')
+        .map((aiReply) => Message(sender: MessageSender.ai, content: aiReply));
   }
 }
