@@ -13,9 +13,9 @@ class AppRouter {
           routes: [
             GoRoute(
               name: ChatPage.route,
-              path: 'chat/:id',
+              path: 'chat',
               builder: (context, state) => ChatPage(
-                chatId: state.pathParameters['id']!,
+                chatId: state.uri.queryParameters['id'],
               ),
             ),
           ],

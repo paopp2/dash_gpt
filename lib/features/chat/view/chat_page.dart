@@ -8,11 +8,11 @@ import 'chat_view.dart';
 class ChatPage extends StatelessWidget {
   const ChatPage({
     super.key,
-    required this.chatId,
+    this.chatId,
   });
 
   static String route = 'chat_page';
-  final String chatId;
+  final String? chatId;
 
   @override
   Widget build(BuildContext context) {
