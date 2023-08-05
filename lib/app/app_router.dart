@@ -1,5 +1,5 @@
 import 'package:dash_gpt/features/chat/view/chat_page.dart';
-import 'package:dash_gpt/features/chats_overview/chats_overview_page.dart';
+import 'package:dash_gpt/features/chats_overview/view/chats_overview_page.dart';
 import 'package:go_router/go_router.dart';
 
 class AppRouter {
