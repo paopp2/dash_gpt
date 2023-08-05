@@ -29,6 +29,13 @@ class ChatRoom extends Equatable {
     );
   }
 
+  factory ChatRoom.from({String? id, String? title}) {
+    return ChatRoom(
+      header: ChatRoomHeader(id: id, title: title),
+      title: title ?? '',
+    );
+  }
+
   @override
   List<Object?> get props => [header, messages];
 
