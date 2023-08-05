@@ -10,5 +10,7 @@ abstract class AIChatApi {
 
   Stream<ChatRoom> chatRoomStream(String id);
 
-  Future<void> createNewChatRoom({String? id, String? title});
+  Future<ChatRoom> createNewChatRoom({String? id, String? title});
+
+  Future<void> deleteChatRoom(String id);
 }

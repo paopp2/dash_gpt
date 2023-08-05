@@ -15,7 +15,7 @@ class AIChatRepository implements AIChatApi {
   }
 
   @override
-  Future<void> createNewChatRoom({String? id, String? title}) {
+  Future<ChatRoom> createNewChatRoom({String? id, String? title}) {
     return _aiChatApi.createNewChatRoom(id: id, title: title);
   }
 
@@ -33,5 +33,10 @@ class AIChatRepository implements AIChatApi {
       chatRoomId: chatRoomId,
       message: message,
     );
+  }
+
+  @override
+  Future<void> deleteChatRoom(String id) {
+    return _aiChatApi.deleteChatRoom(id);
   }
 }

@@ -36,13 +36,10 @@ class OpenAIChatApi implements AIChatApi {
   }
 
   @override
-  Future<void> createNewChatRoom({String? id, String? title}) async {
-    final currChatRoomMap = chatRoomMapSubject.value;
+  Future<ChatRoom> createNewChatRoom({String? id, String? title}) async {
     final newChatRoom = ChatRoom.from(id: id, title: title);
-    chatRoomMapSubject.add({
-      ...currChatRoomMap,
-      newChatRoom.header.id: newChatRoom,
-    });
+    updateChatRoom(newChatRoom);
+    return newChatRoom;
   }
 
   @override
@@ -121,6 +118,7 @@ title: ''',
 
   @visibleForTesting
   void updateChatRoom(ChatRoom chatRoom) {
+    print(';;;; update chatRoom:$chatRoom');
     chatRoomMapSubject.add({
       ...chatRoomMapSubject.value,
       chatRoom.header.id: chatRoom,
@@ -146,5 +144,11 @@ title: ''',
         .map((aiChatCompletion) => aiChatCompletion.choices.first.delta.content)
         .scan((aiReply, aiReplyDelta, _) => aiReply + (aiReplyDelta ?? ''), '')
         .map((aiReply) => Message(sender: MessageSender.ai, content: aiReply));
+  }
+
+  @override
+  Future<void> deleteChatRoom(String id) async {
+    final updatedChatRoomMap = chatRoomMapSubject.value..remove(id);
+    chatRoomMapSubject.add(updatedChatRoomMap);
   }
 }
