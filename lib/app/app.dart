@@ -1,5 +1,5 @@
 import 'package:ai_chat_repository/ai_chat_repository.dart';
-import 'package:dash_gpt/features/chat/view/chat_page.dart';
+import 'package:dash_gpt/app/app_router.dart';
 import 'package:dash_gpt/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,10 +23,10 @@ class AppView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
-      home: const ChatPage(),
+      routerConfig: AppRouter.instance,
     );
   }
 }

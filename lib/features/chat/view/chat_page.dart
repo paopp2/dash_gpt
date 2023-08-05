@@ -2,17 +2,33 @@ import 'package:ai_chat_repository/ai_chat_repository.dart';
 import 'package:dash_gpt/features/chat/bloc/chat_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import 'chat_view.dart';
 
 class ChatPage extends StatelessWidget {
-  const ChatPage({super.key});
+  const ChatPage({
+    super.key,
+    required this.chatId,
+  });
+
+  final String chatId;
+
+  static GoRoute get route {
+    return GoRoute(
+      name: 'chat_page',
+      path: '/chat/:id',
+      builder: (context, state) => ChatPage(
+        chatId: state.pathParameters['id']!,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => ChatBloc(
-        chatRoomId: 'id',
+        chatRoomId: chatId,
         aiChatRepository: context.read<AIChatRepository>(),
       )..add(ChatRoomInitRequested()),
       child: const ChatView(),
