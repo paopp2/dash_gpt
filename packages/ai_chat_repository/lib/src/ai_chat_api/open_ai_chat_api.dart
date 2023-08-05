@@ -109,7 +109,7 @@ class OpenAIChatApi implements AIChatApi {
 Speaker 1: $initialUserMessage
 Speaker 2: $aiReply
 
-NOTE: Ensure to NOT enclose your reply in quotation marks.
+NOTE: Ensure to NOT enclose the title in quotation marks.
 
 title: ''',
     );

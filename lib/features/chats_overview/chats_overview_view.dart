@@ -8,22 +8,15 @@ class ChatsOverviewView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const Text(
-            'ChatsOverview Page',
-            textAlign: TextAlign.center,
-          ),
-          ElevatedButton(
-            onPressed: () => context.goNamed(
-              ChatPage.route.name!,
-              pathParameters: {'id': 'test_id'},
-            ),
-            child: const Text('Go'),
-          ),
-        ],
+      body: const Center(
+        child: Text('ChatsOverview Page'),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => context.goNamed(
+          ChatPage.route.name!,
+          pathParameters: {'id': 'test_id'},
+        ),
+        child: const Icon(Icons.add),
       ),
     );
   }
