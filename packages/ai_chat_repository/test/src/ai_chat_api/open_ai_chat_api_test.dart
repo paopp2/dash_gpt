@@ -1,5 +1,4 @@
 import 'package:ai_chat_repository/ai_chat_repository.dart';
-import 'package:ai_chat_repository/src/ai_chat_api/open_ai_chat_api.dart';
 import 'package:clock/clock.dart';
 import 'package:dart_openai/dart_openai.dart';
 import 'package:mocktail/mocktail.dart';
@@ -75,7 +74,7 @@ void main() {
       test('maps the chatRoomMap to a stream of its chatRoomHeaders', () async {
         openAIChatAPI.chatRoomMapSubject.add(_getMockChatRoomMap);
         final expectedValue =
-            _getMockChatRoomMap.entries.map((e) => e.key).toList();
+            _getMockChatRoomMap.entries.map((e) => e.value.header).toList();
         final actualValue = await openAIChatAPI.getChatRoomHeaders().first;
         expect(actualValue, expectedValue);
       });
@@ -274,5 +273,5 @@ List<ChatRoom> get _getMockChatRooms => List.generate(
       (i) => ChatRoom(header: ChatRoomHeader(id: '$i'), title: 'title $i'),
     );
 
-Map<ChatRoomHeader, ChatRoom> get _getMockChatRoomMap =>
-    {for (final chatRoom in _getMockChatRooms) chatRoom.header: chatRoom};
+Map<String, ChatRoom> get _getMockChatRoomMap =>
+    {for (final chatRoom in _getMockChatRooms) chatRoom.header.id: chatRoom};
