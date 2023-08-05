@@ -6,8 +6,20 @@ class AppRouter {
   static get instance {
     return GoRouter(
       routes: [
-        ChatsOverviewPage.route,
-        ChatPage.route,
+        GoRoute(
+          name: ChatsOverviewPage.route,
+          path: '/',
+          builder: (context, state) => const ChatsOverviewPage(),
+          routes: [
+            GoRoute(
+              name: ChatPage.route,
+              path: 'chat/:id',
+              builder: (context, state) => ChatPage(
+                chatId: state.pathParameters['id']!,
+              ),
+            ),
+          ],
+        ),
       ],
     );
   }

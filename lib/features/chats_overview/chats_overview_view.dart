@@ -13,7 +13,7 @@ class ChatsOverviewView extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.goNamed(
-          ChatPage.route.name!,
+          ChatPage.route,
           pathParameters: {'id': 'test_id'},
         ),
         child: const Icon(Icons.add),
