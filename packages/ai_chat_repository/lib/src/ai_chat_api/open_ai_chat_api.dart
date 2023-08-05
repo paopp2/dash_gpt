@@ -40,7 +40,7 @@ class OpenAIChatApi implements AIChatApi {
   @override
   Future<void> createNewChatRoom({String? id, String? title}) async {
     final currChatRoomMap = chatRoomMapSubject.value;
-    final newChatRoom = ChatRoom(header: ChatRoomHeader(id: id, title: title));
+    final newChatRoom = ChatRoom.from(id: id, title: title);
     chatRoomMapSubject.add({
       ...currChatRoomMap,
       newChatRoom.header: newChatRoom,
