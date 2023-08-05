@@ -12,7 +12,12 @@ class ChatView extends StatelessWidget {
     final textController = TextEditingController();
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Dash GPT")),
+      appBar: AppBar(
+        title: BlocSelector<ChatBloc, ChatState, String>(
+          selector: (state) => state.chatRoomTitle,
+          builder: (_, chatRoomTitle) => Text(chatRoomTitle),
+        ),
+      ),
       body: Column(
         children: [
           Expanded(

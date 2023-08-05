@@ -28,6 +28,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     await emit.forEach(
       aiChatRepository.chatRoomStream(chatRoomId),
       onData: (chatRoom) => state.copyWith(
+        chatRoomTitle: chatRoom.header.title,
         status: ChatRoomStatus.success,
         messages: chatRoom.messages,
       ),
