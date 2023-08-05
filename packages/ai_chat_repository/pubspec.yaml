@@ -8,6 +8,7 @@ environment:
 
 # Add regular dependencies here.
 dependencies:
+  clock: ^1.1.1
   dart_openai: ^4.0.0
   equatable: ^2.0.5
   meta: ^1.9.1
