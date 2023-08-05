@@ -24,14 +24,12 @@ class OpenAIChatApi implements AIChatApi {
   final String _openAIModel;
 
   @visibleForTesting
-  final chatRoomMapSubject =
-      BehaviorSubject<Map<ChatRoomHeader, ChatRoom>>.seeded({});
+  final chatRoomMapSubject = BehaviorSubject<Map<String, ChatRoom>>.seeded({});
 
   @override
   Stream<ChatRoom> chatRoomStream(String id) {
     return chatRoomMapSubject
-        .map((Map<ChatRoomHeader, ChatRoom> chatRoomMap) =>
-            chatRoomMap.values.toList())
+        .map((Map<String, ChatRoom> chatRoomMap) => chatRoomMap.values.toList())
         .map((List<ChatRoom> chatRooms) =>
             chatRooms.firstWhere((chatRoom) => chatRoom.header.id == id))
         .asBroadcastStream();
@@ -43,14 +41,16 @@ class OpenAIChatApi implements AIChatApi {
     final newChatRoom = ChatRoom.from(id: id, title: title);
     chatRoomMapSubject.add({
       ...currChatRoomMap,
-      newChatRoom.header: newChatRoom,
+      newChatRoom.header.id: newChatRoom,
     });
   }
 
   @override
   Stream<List<ChatRoomHeader>> getChatRoomHeaders() {
     return chatRoomMapSubject
-        .map((chatRoomMap) => chatRoomMap.keys.toList())
+        .map((chatRoomMap) => chatRoomMap.values.toList())
+        .map((chatRooms) =>
+            chatRooms.map((chatRoom) => chatRoom.header).toList())
         .asBroadcastStream();
   }
 
@@ -73,8 +73,23 @@ class OpenAIChatApi implements AIChatApi {
           messages: [...chatRoomWithUserMessage.messages, aiReplyMessage],
         ),
       ),
-      onDone: () {
-        chatRoomChangesSubject.close();
+      onDone: () async {
+        final finalChatRoomState = chatRoomChangesSubject.value;
+        final chatMessages = finalChatRoomState.messages;
+        if (chatMessages.length == 2) {
+          getTitleForNewChatRoom(
+            initialUserMessage: chatMessages.first.content,
+            aiReply: chatMessages.last.content,
+          ).listen(
+            (chatRoomTitle) => chatRoomChangesSubject.add(
+              finalChatRoomState.copyWith(title: chatRoomTitle),
+            ),
+            onDone: chatRoomChangesSubject.close,
+          );
+        } else {
+          chatRoomChangesSubject.close();
+        }
+
         sendMessageCompleter.complete();
       },
     );
@@ -83,11 +98,32 @@ class OpenAIChatApi implements AIChatApi {
     return sendMessageCompleter.future;
   }
 
+  Stream<String> getTitleForNewChatRoom({
+    required String initialUserMessage,
+    required String aiReply,
+  }) {
+    final getTitleMessage = Message(
+      sender: MessageSender.user,
+      content:
+          '''Write a very, very short title (preferrably 5 words or less) for the following conversation:
+Speaker 1: $initialUserMessage
+Speaker 2: $aiReply
+
+NOTE: Ensure to NOT enclose your reply in quotation marks.
+
+title: ''',
+    );
+
+    return getAIReplyMessageStream([getTitleMessage]).map(
+      (message) => message.content,
+    );
+  }
+
   @visibleForTesting
   void updateChatRoom(ChatRoom chatRoom) {
     chatRoomMapSubject.add({
       ...chatRoomMapSubject.value,
-      chatRoom.header: chatRoom,
+      chatRoom.header.id: chatRoom,
     });
   }
 

@@ -21,10 +21,11 @@ class ChatRoom extends Equatable {
   }
 
   ChatRoom copyWith({
+    String? title,
     List<Message>? messages,
   }) {
     return ChatRoom(
-      header: header,
+      header: header.copyWith(title: title ?? header.title),
       messages: messages ?? this.messages,
     );
   }

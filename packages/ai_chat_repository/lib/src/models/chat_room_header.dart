@@ -12,6 +12,13 @@ class ChatRoomHeader extends Equatable {
   final String id;
   final String? title;
 
+  ChatRoomHeader copyWith({String? title}) {
+    return ChatRoomHeader(
+      id: id,
+      title: title ?? this.title,
+    );
+  }
+
   @override
   List<Object?> get props => [id, title];
 
