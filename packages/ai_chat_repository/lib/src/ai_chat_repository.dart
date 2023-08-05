@@ -16,7 +16,7 @@ class AIChatRepository implements AIChatApi {
 
   @override
   Future<void> createNewChatRoom({String? id, String? title}) {
-    return _aiChatApi.createNewChatRoom();
+    return _aiChatApi.createNewChatRoom(id: id, title: title);
   }
 
   @override
