@@ -113,7 +113,7 @@ packages:
     source: hosted
     version: "3.0.3"
   dart_openai:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: dart_openai
       sha256: "707f6975454513f4a6197125b5a0fbe92ab7cbe4b8ea9111e529a09d7a3ce0c3"

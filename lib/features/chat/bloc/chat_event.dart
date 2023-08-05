@@ -6,3 +6,12 @@ sealed class ChatEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+final class ChatRoomInitRequested extends ChatEvent {}
+
+final class ChatMessageChanged extends ChatEvent {
+  const ChatMessageChanged({required this.message});
+  final String message;
+}
+
+final class ChatMessageSent extends ChatEvent {}

@@ -10,6 +10,7 @@ dependencies:
   ai_chat_repository:
     path: packages/ai_chat_repository
   bloc: ^8.1.2
+  dart_openai: ^4.0.0
   equatable: ^2.0.5
   flutter:
     sdk: flutter

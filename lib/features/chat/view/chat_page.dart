@@ -1,54 +1,21 @@
+import 'package:ai_chat_repository/ai_chat_repository.dart';
+import 'package:dash_gpt/features/chat/bloc/chat_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'chat_view.dart';
 
 class ChatPage extends StatelessWidget {
   const ChatPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const ChatView();
-  }
-}
-
-class ChatView extends StatelessWidget {
-  const ChatView({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Dash GPT")),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              reverse: true,
-              itemBuilder: (context, index) {
-                return const ListTile(
-                  title: Text('Hello world'),
-                );
-              },
-            ),
-          ),
-          Container(
-            color: Theme.of(context).secondaryHeaderColor,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                children: [
-                  const Expanded(
-                    child: TextField(
-                      decoration: InputDecoration(hintText: 'Message here'),
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.send),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
+    return BlocProvider(
+      create: (context) => ChatBloc(
+        chatRoomId: 'id',
+        aiChatRepository: context.read<AIChatRepository>(),
+      )..add(ChatRoomInitRequested()),
+      child: const ChatView(),
     );
   }
 }
