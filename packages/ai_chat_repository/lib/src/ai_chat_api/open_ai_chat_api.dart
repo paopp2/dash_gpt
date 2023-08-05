@@ -5,17 +5,22 @@ import 'package:ai_chat_repository/src/models/chat_room.dart';
 import 'package:ai_chat_repository/src/models/chat_room_header.dart';
 import 'package:ai_chat_repository/src/models/message.dart';
 import 'package:dart_openai/dart_openai.dart';
+
+// Will need the OpenAIChat interface to allow mocking
+// ignore: implementation_imports
+import 'package:dart_openai/src/instance/chat/chat.dart' show OpenAIChat;
+
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
 class OpenAIChatApi implements AIChatApi {
   OpenAIChatApi({
-    required OpenAI openAIInstance,
+    required OpenAIChat openAIChat,
     required String openAIModel,
-  })  : _openAI = openAIInstance,
+  })  : _openAIChat = openAIChat,
         _openAIModel = openAIModel;
 
-  final OpenAI _openAI;
+  final OpenAIChat _openAIChat;
   final String _openAIModel;
 
   @visibleForTesting
@@ -100,7 +105,7 @@ class OpenAIChatApi implements AIChatApi {
   @visibleForTesting
   Stream<Message> getAIReplyMessageStream(List<Message> chatMessages) {
     final aiChatMessages = chatMessages.map(toOpenAIMessage).toList();
-    return _openAI.chat
+    return _openAIChat
         .createStream(model: _openAIModel, messages: aiChatMessages)
         .map((aiChatCompletion) => aiChatCompletion.choices.first.delta.content)
         .scan((aiReply, aiReplyDelta, _) => aiReply + (aiReplyDelta ?? ''), '')
