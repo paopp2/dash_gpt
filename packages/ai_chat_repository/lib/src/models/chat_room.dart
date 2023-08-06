@@ -8,7 +8,7 @@ class ChatRoom extends Equatable {
   ChatRoom({
     ChatRoomHeader? header,
     this.messages = const <Message>[],
-    String title = '',
+    String? title,
   }) : header = header ?? ChatRoomHeader(title: title);
 
   final ChatRoomHeader header;
@@ -33,7 +33,7 @@ class ChatRoom extends Equatable {
   factory ChatRoom.from({String? id, String? title}) {
     return ChatRoom(
       header: ChatRoomHeader(id: id, title: title),
-      title: title ?? '',
+      title: title,
     );
   }
 

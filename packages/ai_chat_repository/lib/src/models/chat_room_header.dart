@@ -6,8 +6,9 @@ import 'package:uuid/uuid.dart';
 class ChatRoomHeader extends Equatable {
   ChatRoomHeader({
     String? id,
-    this.title = '',
-  }) : id = id ?? Uuid().v4();
+    String? title,
+  })  : id = id ?? Uuid().v4(),
+        title = title ?? 'New chat';
 
   final String id;
   final String? title;
