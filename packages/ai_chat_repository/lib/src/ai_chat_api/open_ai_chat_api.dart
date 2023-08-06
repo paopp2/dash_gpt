@@ -118,7 +118,6 @@ title: ''',
 
   @visibleForTesting
   void updateChatRoom(ChatRoom chatRoom) {
-    print(';;;; update chatRoom:$chatRoom');
     chatRoomMapSubject.add({
       ...chatRoomMapSubject.value,
       chatRoom.header.id: chatRoom,
