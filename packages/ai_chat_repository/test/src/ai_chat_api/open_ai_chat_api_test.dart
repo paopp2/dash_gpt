@@ -132,6 +132,68 @@ void main() {
           });
         },
       );
+
+      test(
+        'Obtains a title for conversation after initial message and reply from AI if new ChatRoom',
+        () async {
+          when(() => mockOpenAIChat.createStream(
+                model: any(named: 'model'),
+                messages: any(named: 'messages'),
+              )).thenAnswer(
+            (_) => Stream.fromIterable(_mockChatCompletion(1)),
+          );
+
+          final initialChatRoomMap = _getMockChatRoomMap.entries.first;
+          final initialMap = {initialChatRoomMap.key: initialChatRoomMap.value};
+          openAIChatAPI.chatRoomMapSubject.add(initialMap);
+          await openAIChatAPI.sendMessage(
+              chatRoomId: '0', message: 'test_message');
+
+          // Called once for initial reply from AI
+          // Called again for creating the title
+          verify(
+            () => mockOpenAIChat.createStream(
+              model: any(named: 'model'),
+              messages: any(named: 'messages'),
+            ),
+          ).called(2);
+        },
+      );
+
+      test(
+        'Skips obtaining a title when past the initial message and reply (title was already obtained)',
+        () async {
+          when(() => mockOpenAIChat.createStream(
+                model: any(named: 'model'),
+                messages: any(named: 'messages'),
+              )).thenAnswer(
+            (_) => Stream.fromIterable(_mockChatCompletion(1)),
+          );
+
+          final initialChatRoomMap = _getMockChatRoomMap.entries.first;
+          final initialMap = {
+            initialChatRoomMap.key: initialChatRoomMap.value.copyWith(
+              messages: [
+                ...initialChatRoomMap.value.messages,
+                Message(content: 'user_message', sender: MessageSender.user),
+                Message(content: 'ai_message', sender: MessageSender.ai),
+              ],
+            ),
+          };
+          openAIChatAPI.chatRoomMapSubject.add(initialMap);
+          await openAIChatAPI.sendMessage(
+              chatRoomId: '0', message: 'test_message');
+
+          // Called once for initial reply from AI
+          // Called again for creating the title
+          verify(
+            () => mockOpenAIChat.createStream(
+              model: any(named: 'model'),
+              messages: any(named: 'messages'),
+            ),
+          ).called(1);
+        },
+      );
     });
 
     group('updateChatRoom', () {
@@ -237,6 +299,27 @@ void main() {
             await openAIChatAPI.getAIReplyMessageStream([]).last;
 
         expect(lastReplyMessage.content, expectedAccumulatedMessageContent);
+      });
+    });
+
+    group('deleteChatRoom', () {
+      test('deletes chat room with provided id', () {
+        openAIChatAPI.chatRoomMapSubject.add(_getMockChatRoomMap);
+        final chatRoomIdToDelete = _getMockChatRoomMap.entries.first.key;
+        expect(
+          openAIChatAPI.chatRoomMapSubject.value.containsKey(
+            chatRoomIdToDelete,
+          ),
+          true,
+        );
+
+        openAIChatAPI.deleteChatRoom(chatRoomIdToDelete);
+        expect(
+          openAIChatAPI.chatRoomMapSubject.value.containsKey(
+            chatRoomIdToDelete,
+          ),
+          false,
+        );
       });
     });
   });
