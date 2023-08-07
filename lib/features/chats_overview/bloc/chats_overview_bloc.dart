@@ -21,11 +21,12 @@ class ChatsOverviewBloc extends Bloc<ChatsOverviewEvent, ChatsOverviewState> {
     ChatsOverviewInitRequested event,
     Emitter<ChatsOverviewState> emit,
   ) async {
-    emit(state.copyWith(status: ChatsOverviewStatus.loading));
-
-    emit.forEach(
+    await emit.forEach(
       aiChatRepository.getChatRoomHeaders(),
-      onData: (chatRooms) => state.copyWith(chatRooms: chatRooms),
+      onData: (chatRooms) => state.copyWith(
+        chatRooms: chatRooms,
+        status: ChatsOverviewStatus.success,
+      ),
     );
   }
 
