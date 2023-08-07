@@ -24,6 +24,14 @@ class ChatsOverviewView extends StatelessWidget {
                 child: ListTile(
                   tileColor: Colors.blue.shade100,
                   title: Text(chatRoomHeader.title ?? ''),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () => context
+                        .read<ChatsOverviewBloc>()
+                        .add(ChatsOverviewRoomDeleteRequested(
+                          chatRoomId: chatRoomHeader.id,
+                        )),
+                  ),
                   onTap: () {
                     context
                       ..read<ChatsOverviewBloc>().add(ChatsOverviewRoomSelected(
