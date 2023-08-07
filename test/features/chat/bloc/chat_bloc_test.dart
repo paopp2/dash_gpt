@@ -141,7 +141,7 @@ void main() {
     group('ChatMessageSent', () {
       blocTest(
         'verify messageToSend reset back to empty string',
-        build: buildBloc,
+        build: () => buildBloc('test_id'),
         seed: () => const ChatState(messageToSend: 'initial'),
         act: (bloc) => bloc.add(ChatMessageSent()),
         expect: () => [const ChatState()],
@@ -149,7 +149,7 @@ void main() {
 
       blocTest(
         'verify calls aiChatRepository.sendMessage(messageToSend) once',
-        build: buildBloc,
+        build: () => buildBloc('test_id'),
         seed: () => const ChatState(messageToSend: 'to_send'),
         act: (bloc) => bloc.add(ChatMessageSent()),
         verify: (bloc) => verify(() => mockAIChatRepository.sendMessage(

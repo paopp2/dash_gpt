@@ -54,7 +54,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   @override
   Future<void> close() {
-    if (state.messages.isEmpty) {
+    if (state.messages.isEmpty && chatRoomId != null) {
       aiChatRepository.deleteChatRoom(chatRoomId!);
     }
     return super.close();
