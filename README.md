@@ -1,3 +1,4 @@
-# dash_gpt
+# DashGPT
+A beautiful cross-platform app to chat with GPT (WIP)
 
-A new Flutter project.
+State management: BLoC
