@@ -1,9 +1,9 @@
 # DashGPT
 A beautiful cross-platform app to chat with GPT (WIP)
 
-State management: BLoC
+## BLoC for state management
 
-How to run locally:
+## How to run locally:
 
 * Create a file named ```secrets.json``` in the root of the project
 * Add the following values to the file:
