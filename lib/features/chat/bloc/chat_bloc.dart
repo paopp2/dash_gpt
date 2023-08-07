@@ -22,8 +22,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     ChatRoomInitRequested event,
     Emitter<ChatState> emit,
   ) async {
-    emit(state.copyWith(status: ChatRoomStatus.loading));
-
     chatRoomId ??= (await aiChatRepository.createNewChatRoom()).header.id;
 
     await emit.forEach(
