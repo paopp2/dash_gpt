@@ -1,7 +1,7 @@
 # DashGPT
 A beautiful cross-platform app to chat with GPT (WIP)
 
-## BLoC for state management
+Uses **BLoC** for state management 
 
 ## How to run locally:
 
