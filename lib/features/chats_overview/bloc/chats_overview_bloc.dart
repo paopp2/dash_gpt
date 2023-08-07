@@ -13,6 +13,7 @@ class ChatsOverviewBloc extends Bloc<ChatsOverviewEvent, ChatsOverviewState> {
   }) : super(const ChatsOverviewState()) {
     on<ChatsOverviewInitRequested>(_onInitRequested);
     on<ChatsOverviewRoomSelected>(_onRoomSelected);
+    on<ChatsOverviewRoomDeleteRequested>(_onRoomDeleteRequested);
   }
 
   final AIChatRepository aiChatRepository;
@@ -35,5 +36,14 @@ class ChatsOverviewBloc extends Bloc<ChatsOverviewEvent, ChatsOverviewState> {
     Emitter<ChatsOverviewState> emit,
   ) {
     emit(state.copyWith(selectedChatRoomId: event.chatRoomId));
+  }
+
+  Future<void> _onRoomDeleteRequested(
+    ChatsOverviewRoomDeleteRequested event,
+    Emitter<ChatsOverviewState> emit,
+  ) async {
+    emit(state.withChatRoomDeleteInProgress(event.chatRoomId));
+    await aiChatRepository.deleteChatRoom(event.chatRoomId);
+    emit(state.withChatRoomDeleteInProgressRemoved(event.chatRoomId));
   }
 }

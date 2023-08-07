@@ -63,5 +63,24 @@ void main() {
         ],
       );
     });
+
+    group('ChatsOverviewRoomDeleteRequested', () {
+      blocTest(
+        'first emits state with id added to chatRoomsDeletionInProgress, then removes it after deletion',
+        build: buildBloc,
+        setUp: () => when(() => mockAIChatRepository.deleteChatRoom('test_id'))
+            .thenAnswer((_) async {}),
+        act: (bloc) => bloc.add(
+          const ChatsOverviewRoomDeleteRequested(chatRoomId: 'test_id'),
+        ),
+        expect: () => [
+          const ChatsOverviewState(chatRoomsDeletionInProgress: {'test_id'}),
+          const ChatsOverviewState(chatRoomsDeletionInProgress: {}),
+        ],
+        verify: (bloc) => verify(
+          () => mockAIChatRepository.deleteChatRoom('test_id'),
+        ).called(1),
+      );
+    });
   });
 }

@@ -13,3 +13,8 @@ final class ChatsOverviewRoomSelected extends ChatsOverviewEvent {
   const ChatsOverviewRoomSelected({required this.chatRoomId});
   final String chatRoomId;
 }
+
+final class ChatsOverviewRoomDeleteRequested extends ChatsOverviewEvent {
+  const ChatsOverviewRoomDeleteRequested({required this.chatRoomId});
+  final String chatRoomId;
+}
