@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../widgets/chat_room_tile.dart';
+
 class ChatsOverviewView extends StatelessWidget {
   const ChatsOverviewView({super.key});
 
@@ -21,28 +23,7 @@ class ChatsOverviewView extends StatelessWidget {
               final chatRoomHeader = chatRooms[index];
               return Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: ListTile(
-                  tileColor: Colors.blue.shade100,
-                  title: Text(chatRoomHeader.title ?? ''),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () => context
-                        .read<ChatsOverviewBloc>()
-                        .add(ChatsOverviewRoomDeleteRequested(
-                          chatRoomId: chatRoomHeader.id,
-                        )),
-                  ),
-                  onTap: () {
-                    context
-                      ..read<ChatsOverviewBloc>().add(ChatsOverviewRoomSelected(
-                        chatRoomId: chatRoomHeader.id,
-                      ))
-                      ..goNamed(
-                        ChatPage.route,
-                        queryParameters: {'id': chatRoomHeader.id},
-                      );
-                  },
-                ),
+                child: ChatRoomTile(chatRoomHeader: chatRoomHeader),
               );
             },
           );
